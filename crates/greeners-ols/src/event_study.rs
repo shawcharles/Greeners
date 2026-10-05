@@ -188,7 +188,15 @@ impl EventStudy {
         };
 
         let std_errors = cov.diag().mapv(|v| v.sqrt());
-        let t_values = &beta / &std_errors;
+        let t_values = Array1::from_shape_fn(k, |i| {
+            if std_errors[i] > 0.0 {
+                beta[i] / std_errors[i]
+            } else if beta[i].abs() > 0.0 {
+                beta[i].signum() * f64::INFINITY
+            } else {
+                0.0
+            }
+        });
         let t_dist = StudentsT::new(0.0, 1.0, df_resid as f64)
             .map_err(|e| GreenersError::InvalidOperation(e.to_string()))?;
         let p_values = t_values.mapv(|t| 2.0 * (1.0 - t_dist.cdf(t.abs())));
@@ -216,8 +224,9 @@ impl EventStudy {
             }
         };
 
-        let ols = OlsResult {
+        let mut ols = OlsResult {
             params: beta,
+            covariance: cov,
             std_errors,
             t_values,
             p_values,
@@ -238,8 +247,11 @@ impl EventStudy {
             inference_type: greeners_core::types::InferenceType::StudentT,
             variable_names: None,
             omitted_vars: Vec::new(),
+            intercept_index: crate::ols::constant_column(&x),
             x_clean: None,
         };
+
+        ols = ols.with_inference(greeners_core::InferenceType::StudentT)?;
 
         Ok(EventStudyResult {
             event_coefs: Array1::from(event_coefs),
