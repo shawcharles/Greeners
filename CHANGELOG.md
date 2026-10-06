@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Event-study coefficients, errors, statistics and probabilities select from
+  the final embedded OLS result. Shared survival-function inference preserves
+  representable tiny tails and keeps both tables consistent.
 - OLS post-estimation and omnibus tests use the retained fitted covariance,
   including robust and clustered covariances; mean-prediction intervals and
   nonlinear contrasts use the same uncertainty as the coefficient table.

@@ -2103,6 +2103,14 @@ See the implementation and test file `tests/ets_invariants.rs`.
 
 ## Event Study
 
+
+Event coefficient inference is computed once through the OLS inference helper.
+Extract event coefficients, SEs, statistics and probabilities from that final
+result in event-column order, using survival probabilities for representable
+small tails. The event design, covariance corrections and degrees of freedom
+remain unchanged. The high-signal and ordinary-tail regressions include both
+response signs and HC1/nonrobust covariance.
+
 ### Specification
 
 See the implementation and test file `tests/event_study_invariants.rs`.

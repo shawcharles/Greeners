@@ -367,6 +367,8 @@ degrees of freedom, which does not qualify inference with few clusters. An
 intercept-only or non-estimable omnibus test is unavailable. Explicit singular
 joint restrictions fail; a valid scalar contrast may use a singular full covariance.
 External struct literals must initialise both new fields from the fitted model.
+Event-study coefficient/error/statistic/probability arrays select from the final
+embedded OLS result, including representable small survival probabilities.
 Nearly null contrasts require resolved positive uncertainty or a certified exact
 PSD factor. Unresolved covariance cancellation returns a precision error instead
 of a fabricated zero standard error. Nonlinear numerical derivatives use
